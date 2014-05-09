@@ -37,7 +37,7 @@
   function show_fields(event, model_ct, field, path, path_verbose) {
     var check_default = $("#check_all").is(':checked');
     $.post(  
-      "/admin_export/export_to_xls_related/",  
+      '{% url "export_to_xls_related" %}',
       {model_ct: model_ct, field: field, path: path, check_default: check_default},
       function(data){
         var element = $(event.target).parent();
