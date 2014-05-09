@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from report_utils.mixins import GetFieldsMixin, DataExportMixin
@@ -37,10 +38,15 @@ class AdminExport(GetFieldsMixin, DataExportMixin, TemplateView):
             self.request.user,
             )
         return self.list_to_xlsx_response(data_list, header=fields)
-    
+
+
 class AdminExportRelated(GetFieldsMixin, TemplateView):
     template_name = 'admin_export/fields.html'
-    
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super(AdminExportRelated, self).dispatch(request, *args, **kwargs)
+
     def post(self, request, **kwargs):
         context = self.get_context_data(**kwargs)
         model_class = ContentType.objects.get(id=self.request.POST['model_ct']).model_class()
