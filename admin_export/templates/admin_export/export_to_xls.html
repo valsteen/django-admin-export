@@ -34,20 +34,21 @@
     }
   }
   
+
   function show_fields(event, model_ct, field, path, path_verbose) {
     var check_default = $("#check_all").is(':checked');
-    $.post(  
+    var target = event.target || event.srcElement ; // IE workaround
+    $.post(
       '{% url "export_to_xls_related" %}',
       {model_ct: model_ct, field: field, path: path, check_default: check_default},
       function(data){
-        var element = $(event.target).parent();
+        var element = $(target).parent();
         $(element).hide('fast');
-        $(element).html(data);
+        $(element).html("<table><tbody>"+data+"</tbody></table>");
         $(element).show('slow');
-      }  
-    );  
+      }
+    );
   }
-  
 </script>
 {% endblock %}
 
